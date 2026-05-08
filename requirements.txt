@@ -1,0 +1,5 @@
+feedparser
+openai
+python-dotenv
+flask
+mysql-connector-python
