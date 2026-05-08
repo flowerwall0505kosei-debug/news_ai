@@ -96,9 +96,34 @@ MYSQL_DATABASE=news_ai
 
 GitHub PagesではFlaskやMySQLは動かさず、`docs/index.html` と `docs/style.css` を公開します。
 
+## GitHub Actionsでの自動更新
+
+`.github/workflows/update-news.yml` に、毎朝7時ごろ（日本時間）にニュースを自動更新するワークフローを用意しています。
+
+使う前に、GitHubのリポジトリ画面でOpenAI APIキーをSecretに登録してください。
+
+1. GitHubでリポジトリを開きます。
+2. `Settings` → `Secrets and variables` → `Actions` を開きます。
+3. `New repository secret` をクリックします。
+4. `Name` に `OPENAI_API_KEY` と入力します。
+5. `Secret` にOpenAI APIキーを入力して保存します。
+
+設定後は、毎朝自動で次の処理が実行されます。
+
+```txt
+python agent.py
+↓
+python generate_site.py
+↓
+data/news.json と docs/index.html に変更があれば自動commit/push
+↓
+GitHub Pagesに反映
+```
+
+すぐに試したい場合は、GitHubの `Actions` タブから `Update news site` を選び、`Run workflow` を押すと手動実行できます。
+
 ## 今後の改善案
 
-- GitHub Actionsで毎朝自動更新する
 - `data/news.json` の件数が増えたら古いニュースを自動整理する
 - カテゴリ別フィルタや重要度フィルタを追加する
 - RSS取得元を複数に増やす
