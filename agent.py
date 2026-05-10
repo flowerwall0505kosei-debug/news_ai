@@ -27,6 +27,14 @@ CATEGORIES = {
     "その他",
 }
 
+RETENTION_DAYS = {
+    1: 7,
+    2: 7,
+    3: 30,
+    4: 183,
+    5: None,
+}
+
 
 def now_jst_string():
     return datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
@@ -131,15 +139,18 @@ def select_and_summarize_news(news_items):
 
 重要度は1から5の整数で評価してください。
 評価は厳しめにしてください。
+重要度は保存期間にも使うため、迷った場合は高くしすぎず低めに評価してください。
 
 重要度5:
 - 業界全体、社会、法規制、大企業の戦略に大きな影響がある
 - 多くの企業、開発者、ユーザーの行動に影響する可能性が高い
 - 主要AIモデルの大型アップデート、大規模サイバー攻撃、法規制、巨大企業の戦略転換など
+- 例外的に重要なニュースだけに使う
 
 重要度4:
 - 広い範囲の企業、ユーザー、開発者に影響しそう
 - 今後の技術トレンドやビジネスの流れを理解する上で重要
+- ニュース全体の中でも明確に重要なものだけに使う
 
 重要度3:
 - ITニュースとして標準的に重要
@@ -247,6 +258,43 @@ def sort_news(news_list):
     )
 
 
+def retention_reference_datetime(item):
+    published_at = parse_datetime_for_sort(item.get("published_at"))
+    if published_at != datetime.min:
+        return published_at
+
+    return parse_datetime_for_sort(item.get("created_at"))
+
+
+def apply_retention(news_list):
+    today = datetime.now(JST).date()
+    kept_news = []
+    removed_count = 0
+
+    for item in news_list:
+        importance = normalize_importance(item.get("importance"))
+        retention_days = RETENTION_DAYS.get(importance, 7)
+
+        if retention_days is None:
+            kept_news.append(item)
+            continue
+
+        reference_date = retention_reference_datetime(item).date()
+        if reference_date == datetime.min.date():
+            kept_news.append(item)
+            continue
+
+        if reference_date >= today - timedelta(days=retention_days):
+            kept_news.append(item)
+        else:
+            removed_count += 1
+
+    if removed_count:
+        print(f"保存期間を過ぎたニュースを{removed_count}件整理しました。")
+
+    return kept_news
+
+
 def save_news_json(selected_news, candidate_news):
     existing_news = load_existing_news()
     published_map = {item["url"]: item.get("published_at", "") for item in candidate_news}
@@ -280,7 +328,7 @@ def save_news_json(selected_news, candidate_news):
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    sorted_news = sort_news(list(news_by_url.values()))
+    sorted_news = sort_news(apply_retention(list(news_by_url.values())))
     with NEWS_JSON_PATH.open("w", encoding="utf-8") as f:
         json.dump(sorted_news, f, ensure_ascii=False, indent=2)
         f.write("\n")

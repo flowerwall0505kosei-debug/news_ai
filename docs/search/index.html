@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ニュース検索 | Tech Compass 505</title>
+  <meta name="description" content="ITニュースをキーワードやカテゴリで検索できます。">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-block">
+        <p class="eyebrow">ITmedia RSS + OpenAI</p>
+        <a class="site-title" href="../index.html">Tech Compass 505</a>
+        <p class="subtitle">重要なITニュースを、毎朝コンパクトに。</p>
+      </div>
+      <form class="site-search" action="../search/index.html" method="get">
+        <label class="visually-hidden" for="site-search-search">検索</label>
+        <input id="site-search-search" name="q" type="search" placeholder="ニュースを検索">
+        <button type="submit">検索</button>
+      </form>
+    </div>
+    <nav class="site-nav" aria-label="主要ページ">
+      <a href="../index.html">トップ</a>
+      <a href="../news/index.html">ニュース一覧</a>
+      <a href="../ai/index.html">AIニュース</a>
+      <a href="../search/index.html" aria-current="page">検索</a>
+    </nav>
+    <p class="generated-at">最終生成: 2026-05-10 16:44:14</p>
+  </header>
+
+  <main>
+
+    <section class="page-section">
+      <div class="section-heading">
+        <h1>ニュース検索</h1>
+        <p>キーワード、日付、重要度、カテゴリで絞り込めます。</p>
+      </div>
+      <form id="search-form" class="filter-panel">
+        <label>
+          <span>キーワード</span>
+          <input id="keyword" type="search" placeholder="タイトル・要約・理由を検索">
+        </label>
+        <label>
+          <span>カテゴリ</span>
+          <select id="category">
+            <option value="">すべて</option>
+          <option value="AI">AI</option>
+          <option value="セキュリティ">セキュリティ</option>
+          <option value="クラウド">クラウド</option>
+          <option value="半導体">半導体</option>
+          <option value="ガジェット">ガジェット</option>
+          <option value="ビジネス">ビジネス</option>
+          <option value="法規制">法規制</option>
+          <option value="その他">その他</option>
+          </select>
+        </label>
+        <label>
+          <span>重要度</span>
+          <select id="importance">
+            <option value="0">すべて</option>
+            <option value="5">5以上</option>
+            <option value="4">4以上</option>
+            <option value="3">3以上</option>
+            <option value="2">2以上</option>
+            <option value="1">1以上</option>
+          </select>
+        </label>
+        <label>
+          <span>開始日</span>
+          <input id="date-from" type="date">
+        </label>
+        <label>
+          <span>終了日</span>
+          <input id="date-to" type="date">
+        </label>
+        <div class="filter-actions">
+          <button type="submit">検索</button>
+          <button type="reset">リセット</button>
+        </div>
+      </form>
+      <p id="search-summary" class="search-summary"></p>
+      <div id="search-results" class="news-list"></div>
+    </section>
+
+  </main>
+
+  <script id="news-data" type="application/json">[{"title": "Fitbitアプリは「Google Health」に　Googlがフィットネスアプリ統合　既存ユーザーも順次移行", "url": "https://www.itmedia.co.jp/news/articles/2605/08/news113.html", "summary": "FitbitアプリをGoogle Healthに統合する方針を発表。既存ユーザーは順次移行され、データ連携やサービス統合が進む見込み。\n健康データの取り扱いやエコシステム戦略が強化される動き。", "importance": 4, "category": "クラウド", "reason": "Googleのヘルス・ウェアラブル戦略と健康データのクラウド統合はプライバシーやサービス競争に広範な影響を与えるため。", "published_at": "2026-05-08 18:00:00", "created_at": "2026-05-09 00:22:03"}, {"title": "Apple、390億円の和解金支払いで合意　AI機能の開発遅れに関する集団訴訟で", "url": "https://www.itmedia.co.jp/news/articles/2605/08/news100.html", "summary": "AppleがAI機能の開発遅延を巡る集団訴訟で約390億円の和解金支払いに合意。\n企業のAI開発責任や訴訟リスクに関する前例となる可能性がある。", "importance": 4, "category": "法規制", "reason": "大手企業のAI開発遅延を巡る巨額和解は業界の訴訟慣行や開発姿勢に影響を与えるため重要。", "published_at": "2026-05-08 17:05:00", "created_at": "2026-05-09 00:22:03"}, {"title": "メローニ伊首相がAI生成とみられる自身の下着姿投稿　捏造画像通し「危険なツール」と警告", "url": "https://www.itmedia.co.jp/news/articles/2605/08/news086.html", "summary": "イタリアのメローニ首相が、自身の下着姿とされるAI生成画像の投稿を受けて捏造の危険性を訴えた。\n政治家へのディープフェイク拡散が問題視されている。", "importance": 3, "category": "AI", "reason": "政治的影響力を持つ人物へのAI生成デマ事例は社会・政策議論を促すが、単発の事例のため重要度は厳しめに評価。", "published_at": "2026-05-08 14:00:00", "created_at": "2026-05-09 00:22:03"}, {"title": "はてな、約11億円の資金流出で特別調査委員会を設置　外部の専門家で構成", "url": "https://www.itmedia.co.jp/news/articles/2605/08/news079.html", "summary": "はてなが約11億円の資金流出を公表し、外部専門家による特別調査委員会を設置。\n流出の原因や内部統制の問題点究明が進められる。", "importance": 4, "category": "セキュリティ", "reason": "大規模な資金流出はサービス利用者と投資家の信頼に直結し、セキュリティガバナンスの教訓となるため。", "published_at": "2026-05-08 13:29:00", "created_at": "2026-05-09 00:22:03"}, {"title": "「ChatGPT」に緊急連絡先機能「Trusted Contact」登場　自殺リスク検知で通知", "url": "https://www.itmedia.co.jp/news/articles/2605/08/news054.html", "summary": "ChatGPTに自殺リスクを検知して登録した緊急連絡先に通知する「Trusted Contact」機能が追加。\nAIの安全対策とユーザー保護の一環として実装される。", "importance": 4, "category": "AI", "reason": "AIプラットフォームの安全機能強化で、利用者保護とモデレーション方針に直接影響するため重要。", "published_at": "2026-05-08 08:05:00", "created_at": "2026-05-09 00:22:03"}]</script>
+  <script src="../search.js"></script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# AI ITニュース
+# Tech Compass 505
 
 ITmediaのRSSからITニュースを取得し、OpenAI APIで重要ニュースの選定、要約、重要度判定、カテゴリ分類を行い、GitHub Pagesで公開できる静的HTMLを生成するアプリです。
 
@@ -13,9 +13,9 @@ OpenAI APIで選定・要約・重要度判定・カテゴリ分類
 ↓
 data/news.json に保存
 ↓
-generate_site.py で docs/index.html を生成
+generate_site.py で docs/ 配下の静的サイトを生成
 ↓
-GitHub Pagesで docs/index.html を公開
+GitHub Pagesで docs/ を公開
 ```
 
 ## ファイル構成
@@ -33,7 +33,15 @@ news_ai/
 ├─ data/
 │  └─ news.json
 └─ docs/
-   ├─ index.html
+   ├─ index.html          # トップページ
+   ├─ news/
+   │  └─ index.html       # ニュース一覧
+   ├─ ai/
+   │  └─ index.html       # AIニュース
+   ├─ search/
+   │  └─ index.html       # 検索ページ
+   ├─ news.json           # 検索ページ用の公開JSON
+   ├─ search.js
    └─ style.css
 ```
 
@@ -64,7 +72,27 @@ python agent.py
 python generate_site.py
 ```
 
-実行後、`data/news.json` と `docs/index.html` が更新されます。ブラウザで `docs/index.html` を開くと結果を確認できます。
+実行後、`data/news.json` と `docs/` 配下のHTMLが更新されます。ブラウザで `docs/index.html` を開くと結果を確認できます。
+
+## サイト構成
+
+- トップページ: 昨日のニュースと直近の重要ニュースを表示
+- ニュース一覧: 保存中の全ニュースを表示
+- AIニュース: カテゴリがAIのニュースを表示
+- 検索ページ: キーワード、日付、重要度、カテゴリで検索
+
+ニュースカードの選定理由は、最初は折りたたんで表示します。
+
+## ニュースの保存期間
+
+`agent.py` 実行時に、重要度ごとの保存期間を過ぎたニュースを `data/news.json` から整理します。
+
+```txt
+重要度1〜2: 1週間
+重要度3: 1か月
+重要度4: 半年
+重要度5: 削除しない
+```
 
 ## .env の設定
 
@@ -94,7 +122,7 @@ MYSQL_DATABASE=news_ai
 5. `Build and deployment` のSourceで `Deploy from a branch` を選びます。
 6. Branchを `main`、フォルダを `/docs` に設定して保存します。
 
-GitHub PagesではFlaskやMySQLは動かさず、`docs/index.html` と `docs/style.css` を公開します。
+GitHub PagesではFlaskやMySQLは動かさず、`docs/` 配下の静的ファイルを公開します。
 
 ## GitHub Actionsでの自動更新
 
@@ -115,7 +143,7 @@ python agent.py
 ↓
 python generate_site.py
 ↓
-data/news.json と docs/index.html に変更があれば自動commit/push
+data/news.json と docs/ 配下に変更があれば自動commit/push
 ↓
 GitHub Pagesに反映
 ```
@@ -124,7 +152,5 @@ GitHub Pagesに反映
 
 ## 今後の改善案
 
-- `data/news.json` の件数が増えたら古いニュースを自動整理する
-- カテゴリ別フィルタや重要度フィルタを追加する
 - RSS取得元を複数に増やす
 - エラー発生時のログを分かりやすくする
