@@ -12,6 +12,16 @@ DOCS_DIR = BASE_DIR / "docs"
 PUBLIC_JSON_PATH = DOCS_DIR / "news.json"
 JST = ZoneInfo("Asia/Tokyo")
 CATEGORIES = ["AI", "セキュリティ", "クラウド", "半導体", "ガジェット", "ビジネス", "法規制", "その他"]
+CATEGORY_CLASS_MAP = {
+    "AI": "ai",
+    "セキュリティ": "security",
+    "クラウド": "cloud",
+    "半導体": "semiconductor",
+    "ガジェット": "gadget",
+    "ビジネス": "business",
+    "法規制": "law",
+    "その他": "other",
+}
 
 
 def load_news():
@@ -70,6 +80,10 @@ def format_multiline(value):
     return escaped.replace("\n", "<br>")
 
 
+def category_class(value):
+    return CATEGORY_CLASS_MAP.get(str(value or "").strip(), "other")
+
+
 def is_yesterday(news, today):
     published = parse_datetime(news.get("published_at"))
     return published.date() == today - timedelta(days=1)
@@ -88,7 +102,9 @@ def render_news_card(news):
     url = escape_text(news.get("url") or "#")
     summary = format_multiline(news.get("summary"))
     importance = normalize_importance(news.get("importance"))
-    category = escape_text(news.get("category") or "未分類")
+    raw_category = news.get("category") or "未分類"
+    category = escape_text(raw_category)
+    category_class_name = escape_text(category_class(raw_category))
     reason = format_multiline(news.get("reason"))
     published_at = escape_text(news.get("published_at") or "不明")
     created_at = escape_text(news.get("created_at") or "不明")
@@ -96,7 +112,7 @@ def render_news_card(news):
     return f"""
     <article class="news-card">
       <div class="news-card__meta">
-        <span class="category">{category}</span>
+        <span class="category category--{category_class_name}">{category}</span>
         <time class="published-at">{published_at}</time>
         <span class="importance">重要度 {importance}/5</span>
       </div>

@@ -31,6 +31,21 @@ function normalizeImportance(value) {
   return Math.max(0, Math.min(5, importance));
 }
 
+function categoryClass(value) {
+  const classes = {
+    AI: "ai",
+    セキュリティ: "security",
+    クラウド: "cloud",
+    半導体: "semiconductor",
+    ガジェット: "gadget",
+    ビジネス: "business",
+    法規制: "law",
+    その他: "other",
+  };
+
+  return classes[String(value || "").trim()] || "other";
+}
+
 function dateOnly(value) {
   return String(value || "").slice(0, 10);
 }
@@ -86,7 +101,9 @@ function renderCard(news) {
   const url = escapeHtml(news.url || "#");
   const summaryText = formatMultiline(news.summary || "");
   const reason = formatMultiline(news.reason || "");
-  const category = escapeHtml(news.category || "未分類");
+  const rawCategory = news.category || "未分類";
+  const category = escapeHtml(rawCategory);
+  const categoryClassName = escapeHtml(categoryClass(rawCategory));
   const importance = normalizeImportance(news.importance);
   const publishedAt = escapeHtml(news.published_at || "不明");
   const createdAt = escapeHtml(news.created_at || "不明");
@@ -94,7 +111,7 @@ function renderCard(news) {
   return `
     <article class="news-card">
       <div class="news-card__meta">
-        <span class="category">${category}</span>
+        <span class="category category--${categoryClassName}">${category}</span>
         <time class="published-at">${publishedAt}</time>
         <span class="importance">重要度 ${importance}/5</span>
       </div>

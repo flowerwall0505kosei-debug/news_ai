@@ -254,6 +254,46 @@ button[type="reset"] {
   color: var(--accent);
 }
 
+.category--ai {
+  background: #eee9ff;
+  color: #5b3aa4;
+}
+
+.category--security {
+  background: #ffe8e8;
+  color: #a73535;
+}
+
+.category--cloud {
+  background: #e6f3ff;
+  color: #1263a3;
+}
+
+.category--semiconductor {
+  background: #e9f7ef;
+  color: #247247;
+}
+
+.category--gadget {
+  background: #fff0df;
+  color: #986018;
+}
+
+.category--business {
+  background: #edf0f5;
+  color: #475467;
+}
+
+.category--law {
+  background: #f4e7d5;
+  color: #7b4f18;
+}
+
+.category--other {
+  background: #f0f4f8;
+  color: #52606d;
+}
+
 .importance {
   background: var(--gold-soft);
   color: var(--gold-text);
