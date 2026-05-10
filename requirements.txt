@@ -1,5 +1,6 @@
 feedparser
 openai
 python-dotenv
+tzdata
 flask
 mysql-connector-python
