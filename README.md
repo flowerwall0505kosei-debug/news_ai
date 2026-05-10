@@ -98,7 +98,7 @@ GitHub PagesではFlaskやMySQLは動かさず、`docs/index.html` と `docs/sty
 
 ## GitHub Actionsでの自動更新
 
-`.github/workflows/update-news.yml` に、毎朝7時17分ごろ（日本時間）にニュースを自動更新するワークフローを用意しています。
+`.github/workflows/update-news.yml` に、毎朝6時17分ごろ（日本時間）にニュースを自動更新するワークフローを用意しています。
 
 使う前に、GitHubのリポジトリ画面でOpenAI APIキーをSecretに登録してください。
 
