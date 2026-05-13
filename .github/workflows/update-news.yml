@@ -2,8 +2,8 @@ name: Update news site
 
 on:
   schedule:
-    # 06:17 JST every day. GitHub Actions cron uses UTC.
-    - cron: "17 21 * * *"
+    # 03:16 JST every day. GitHub Actions cron uses UTC.
+    - cron: "16 18 * * *"
   workflow_dispatch:
 
 permissions:
