@@ -75,6 +75,16 @@ def escape_text(value):
     return html.escape(str(value or ""), quote=True)
 
 
+def news_id(news):
+    url = str(news.get("url") or "").strip()
+    if url:
+        return url
+
+    title = str(news.get("title") or "").strip()
+    published_at = str(news.get("published_at") or "").strip()
+    return f"{title}|{published_at}".strip("|")
+
+
 def format_multiline(value):
     escaped = escape_text(value)
     return escaped.replace("\n", "<br>")
@@ -97,6 +107,18 @@ def is_ai_news(news):
     return str(news.get("category", "")).strip() == "AI"
 
 
+def render_favorite_button(news):
+    item_id = escape_text(news_id(news))
+    title = escape_text(news.get("title") or "ニュース")
+
+    return f"""
+        <button class="favorite-button" type="button" data-favorite-button data-favorite-id="{item_id}" data-favorite-title="{title}" aria-pressed="false" aria-label="お気に入りに追加: {title}" title="お気に入りに追加">
+          <span class="favorite-button__icon" aria-hidden="true">☆</span>
+          <span class="favorite-button__text visually-hidden">お気に入り</span>
+        </button>
+"""
+
+
 def render_news_card(news):
     title = escape_text(news.get("title") or "タイトルなし")
     url = escape_text(news.get("url") or "#")
@@ -111,10 +133,13 @@ def render_news_card(news):
 
     return f"""
     <article class="news-card">
-      <div class="news-card__meta">
-        <span class="category category--{category_class_name}">{category}</span>
-        <time class="published-at">{published_at}</time>
-        <span class="importance">重要度 {importance}/5</span>
+      <div class="news-card__head">
+        <div class="news-card__meta">
+          <span class="category category--{category_class_name}">{category}</span>
+          <time class="published-at">{published_at}</time>
+          <span class="importance">重要度 {importance}/5</span>
+        </div>
+{render_favorite_button(news)}
       </div>
       <h2 class="news-title">{title}</h2>
       <div class="summary">
@@ -187,6 +212,7 @@ def render_header(prefix, active, generated_at):
       {nav_link(prefix, "news/index.html", "ニュース一覧", active, "news")}
       {nav_link(prefix, "ai/index.html", "AIニュース", active, "ai")}
       {nav_link(prefix, "search/index.html", "検索", active, "search")}
+      {nav_link(prefix, "favorites/index.html", "お気に入り", active, "favorites")}
     </nav>
     <p class="generated-at">最終生成: {escape_text(generated_at)}</p>
   </header>
@@ -210,6 +236,7 @@ def build_page(title, description, body_html, active, prefix="", extra_body=""):
   <main>
 {body_html}
   </main>
+  <script src="{prefix}favorites.js"></script>
 {extra_body}
 </body>
 </html>
@@ -298,6 +325,24 @@ def build_search_page(news_list):
     return build_page("ニュース検索", "ITニュースをキーワードやカテゴリで検索できます。", body, "search", "../", extra_body)
 
 
+def build_favorites_page(news_list):
+    embedded_json = json.dumps(sort_news(news_list), ensure_ascii=False).replace("<", "\\u003c")
+    body = """
+    <section class="page-section">
+      <div class="section-heading">
+        <h1>お気に入り</h1>
+        <p>あとで読み返したいニュースを一覧表示します。</p>
+      </div>
+      <p id="favorites-summary" class="search-summary"></p>
+      <div id="favorites-results" class="news-list"></div>
+    </section>
+"""
+    extra_body = f"""
+  <script id="news-data" type="application/json">{embedded_json}</script>
+"""
+    return build_page("お気に入り", "お気に入り登録したITニュース一覧です。", body, "favorites", "../", extra_body)
+
+
 def write_page(path, html_text):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
@@ -319,6 +364,7 @@ def generate_site():
     write_page(DOCS_DIR / "news" / "index.html", build_news_page(news_list))
     write_page(DOCS_DIR / "ai" / "index.html", build_ai_page(news_list))
     write_page(DOCS_DIR / "search" / "index.html", build_search_page(news_list))
+    write_page(DOCS_DIR / "favorites" / "index.html", build_favorites_page(news_list))
     publish_json(news_list)
 
     print(f"{DOCS_DIR} に静的サイトを生成しました。ニュース件数: {len(news_list)}件")

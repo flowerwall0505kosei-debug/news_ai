@@ -107,13 +107,19 @@ function renderCard(news) {
   const importance = normalizeImportance(news.importance);
   const publishedAt = escapeHtml(news.published_at || "不明");
   const createdAt = escapeHtml(news.created_at || "不明");
+  const favoriteButton = window.TechCompassFavorites
+    ? window.TechCompassFavorites.renderFavoriteButton(news)
+    : "";
 
   return `
     <article class="news-card">
-      <div class="news-card__meta">
-        <span class="category category--${categoryClassName}">${category}</span>
-        <time class="published-at">${publishedAt}</time>
-        <span class="importance">重要度 ${importance}/5</span>
+      <div class="news-card__head">
+        <div class="news-card__meta">
+          <span class="category category--${categoryClassName}">${category}</span>
+          <time class="published-at">${publishedAt}</time>
+          <span class="importance">重要度 ${importance}/5</span>
+        </div>
+${favoriteButton}
       </div>
       <h2 class="news-title">${title}</h2>
       <div class="summary">
@@ -154,6 +160,7 @@ function render() {
     ? filteredNews.map(renderCard).join("")
     : '<article class="news-card news-card--empty"><h2 class="news-title">条件に合うニュースはありません。</h2></article>';
 
+  window.TechCompassFavorites?.initFavoriteButtons(results);
   updateUrl(filters);
 }
 

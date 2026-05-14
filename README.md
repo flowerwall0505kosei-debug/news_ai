@@ -23,6 +23,7 @@ ITmedia RSS
 - 重要度に応じた古いニュースの自動整理
 - GitHub Pages向けの静的サイト生成
 - キーワード、カテゴリ、重要度、日付によるブラウザ内検索
+- Cookieを使ったニュースのお気に入り登録・一覧表示
 
 ## ファイル構成
 
@@ -41,14 +42,17 @@ techcompass/
 │  ├─ news/index.html       # ニュース一覧
 │  ├─ ai/index.html         # AIニュース
 │  ├─ search/index.html     # 検索ページ
+│  ├─ favorites/index.html  # お気に入りページ
 │  ├─ news.json             # 公開・検索用JSON
 │  ├─ search.js             # 検索処理
+│  ├─ favorites.js          # Cookieによるお気に入り処理
 │  └─ style.css             # サイト共通CSS
 ├─ specification/
 │  ├─ README.md             # 設計書索引
 │  ├─ system-design.md      # システム設計
 │  ├─ data-design.md        # データ設計
-│  └─ operation-design.md   # 運用設計
+│  ├─ operation-design.md   # 運用設計
+│  └─ favorites-cookie-design.md # お気に入り登録機能設計
 └─ .github/workflows/
    └─ update-news.yml       # 自動更新ワークフロー
 ```
@@ -105,8 +109,9 @@ python -m http.server 8000 -d docs
 - ニュース一覧: 保存中の全ニュースを新しい順に表示
 - AIニュース: カテゴリが `AI` のニュースだけを表示
 - 検索ページ: キーワード、カテゴリ、重要度、日付で絞り込み
+- お気に入りページ: Cookieに保存したお気に入りニュースを一覧表示
 
-各ニュースカードには、カテゴリ、公開日時、重要度、タイトル、要約、選定理由、記事リンク、保存日時を表示します。
+各ニュースカードには、カテゴリ、公開日時、重要度、タイトル、要約、選定理由、記事リンク、保存日時、お気に入りボタンを表示します。
 
 ## ニュースの保持期間
 
@@ -159,6 +164,7 @@ python agent.py
 - [システム設計書](specification/system-design.md)
 - [データ設計書](specification/data-design.md)
 - [運用設計書](specification/operation-design.md)
+- [お気に入り登録機能設計書](specification/favorites-cookie-design.md)
 
 ## 注意事項
 

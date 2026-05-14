@@ -10,6 +10,8 @@
   - `data/news.json` のJSON構造、カテゴリ、重要度、保持期間、旧MySQL構成を記載します。
 - [運用設計書](operation-design.md)
   - ローカル実行、GitHub Actions、GitHub Pages公開、環境変数、障害時の確認ポイントを記載します。
+- [お気に入り登録機能設計書](favorites-cookie-design.md)
+  - Cookieを使ったお気に入り登録、星ボタン、お気に入りページ、テスト観点を記載します。
 
 ## 前提
 
