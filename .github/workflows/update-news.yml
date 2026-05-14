@@ -2,8 +2,8 @@ name: Update news site
 
 on:
   schedule:
-    # 03:16 JST every day. GitHub Actions cron uses UTC.
-    - cron: "16 18 * * *"
+    # 00:23-05:23 JST every day. GitHub Actions cron uses UTC.
+    - cron: "23 15-20 * * *"
   workflow_dispatch:
 
 permissions:
@@ -25,24 +25,63 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
+      - name: Refresh default branch
+        run: git pull --ff-only origin main
+
+      - name: Check whether today's scheduled update already ran
+        id: update_guard
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          skip = False
+          if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+              today = datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
+              path = Path("data/news.json")
+              if path.exists():
+                  with path.open("r", encoding="utf-8") as f:
+                      data = json.load(f)
+                  if isinstance(data, list):
+                      skip = any(
+                          isinstance(item, dict)
+                          and str(item.get("created_at", "")).startswith(today)
+                          for item in data
+                      )
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"skip={'true' if skip else 'false'}\n")
+
+          print("Today's scheduled update already ran." if skip else "Update will run.")
+          PY
+
       - name: Set up Python
+        if: steps.update_guard.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
 
       - name: Install dependencies
+        if: steps.update_guard.outputs.skip != 'true'
         run: python -m pip install -r requirements.txt
 
       - name: Fetch and summarize news
+        if: steps.update_guard.outputs.skip != 'true'
         run: python agent.py
 
       - name: Generate static site
+        if: steps.update_guard.outputs.skip != 'true'
         run: python generate_site.py
 
       - name: Commit and push changes
+        if: steps.update_guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

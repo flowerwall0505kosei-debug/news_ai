@@ -99,17 +99,21 @@ python -m http.server 8000 -d docs
 
 実行タイミング:
 
-- 毎日 03:16 JST
+- 毎日 00:23〜05:23 JST の毎時
 - 手動実行 `workflow_dispatch`
+
+GitHub Actionsの定期実行は遅延またはドロップされる可能性があるため、朝6時頃までの反映を狙って複数回スケジュールします。同じ日にすでにスケジュール更新済みの場合、後続の定期実行はスキップします。手動実行はスキップ対象外です。
 
 主な処理:
 
 1. リポジトリをチェックアウトする。
-2. Python 3.12 をセットアップする。
-3. `requirements.txt` をインストールする。
-4. `python agent.py` を実行する。
-5. `python generate_site.py` を実行する。
-6. `data/news.json` と `docs/` に変更があればコミットして `main` にpushする。
+2. `main` の最新状態へfast-forwardする。
+3. スケジュール実行時は、当日分がすでに更新済みか確認する。
+4. Python 3.12 をセットアップする。
+5. `requirements.txt` をインストールする。
+6. `python agent.py` を実行する。
+7. `python generate_site.py` を実行する。
+8. `data/news.json` と `docs/` に変更があればコミットして `main` にpushする。
 
 必要なGitHub Secret:
 

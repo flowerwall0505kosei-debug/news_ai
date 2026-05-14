@@ -323,7 +323,7 @@ def save_news_json(selected_news, candidate_news):
         if url in news_by_url:
             original_created_at = news_by_url[url].get("created_at")
             news_by_url[url].update(normalized)
-            if original_created_at and not normalized["created_at"]:
+            if original_created_at:
                 news_by_url[url]["created_at"] = original_created_at
             updated_count += 1
             print(f"更新: {normalized['title']} / 重要度{normalized['importance']} / {normalized['category']}")
