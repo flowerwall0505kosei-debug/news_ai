@@ -1,5 +1,15 @@
 [
   {
+    "title": "OpenAI、「ChatGPT」に個人向け資産管理機能　金融口座と連携",
+    "url": "https://www.itmedia.co.jp/news/articles/2605/16/news027.html",
+    "summary": "OpenAIがChatGPTに個人向け資産管理機能を導入し、金融口座と連携して残高・取引・資産管理を行える機能を提供。ユーザーの金融データを扱うためプライバシー・セキュリティ上の懸念や規制対応が課題となる。金融サービス領域でのプラットフォーム競争に影響を与える可能性がある。",
+    "importance": 3,
+    "category": "AI",
+    "reason": "主要AIプラットフォームが銀行口座連携の個人金融管理に参入することで、プライバシー・セキュリティ問題や金融業界の競争・規制に影響を与えるため重要。",
+    "published_at": "2026-05-16 07:59:00",
+    "created_at": "2026-05-17 03:10:53"
+  },
+  {
     "title": "Spotify、Appleの「HLS」対応で動画ポッドキャストのクロスプラットフォーム配信を実現へ",
     "url": "https://www.itmedia.co.jp/news/articles/2605/15/news077.html",
     "summary": "SpotifyがAppleのHLSに対応し、動画ポッドキャストのクロスプラットフォーム配信を可能にする方針。配信者と視聴環境の互換性が向上する見込み。",
